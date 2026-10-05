@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marakuya Taxi — ish tizimi</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3effa;--card:#fff;--ink:#1a0b3d;--mute:#5d6b82;--line:#dbe3ec;--acc:#e600e6;--ok:#17a673;--bad:#e5484d;--blue:#5a00ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#120a26;--card:#1d1238;--ink:#eaf0fb;--mute:#93a1bd;--line:#26335a}}
+:root[data-theme="dark"]{--bg:#120a26;--card:#1d1238;--ink:#eaf0fb;--mute:#93a1bd;--line:#26335a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;border-radius:12px;padding:10px 16px;font-weight:600;background:var(--ink);color:var(--card);transition:transform .15s,box-shadow .2s,opacity .2s}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(20,33,61,.25)}button:active{transform:scale(.96)}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);margin-top:6px}
+label{font-size:13px;color:var(--mute);font-weight:600;display:block;margin-top:10px}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,#5a00ff33,transparent 40%),radial-gradient(circle at 85% 90%,#ff00ff33,transparent 40%)}
+.lbox{width:min(440px,100%);animation:rise .7s cubic-bezier(.2,.9,.3,1.2) both}
+.lbox h1{font-size:40px;line-height:1.05;margin:0 0 8px;font-weight:800}
+.lbox p{color:var(--mute);margin:0 0 22px}
+.who{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);margin-bottom:10px;padding:14px}
+.who:hover{border-color:var(--acc);transform:translateX(6px)}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
+.who small{display:block;color:var(--mute);font-weight:400}
+@keyframes rise{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* app */
+header{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+.me{display:flex;align-items:center;gap:12px}
+nav{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:14px;border:1px solid var(--line);position:relative}
+nav button{background:transparent;color:var(--mute);box-shadow:none;padding:8px 14px}
+nav button.on{background:var(--ink);color:var(--card)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;animation:pop .4s both}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.clock{text-align:center}
+.ring{width:190px;height:190px;margin:6px auto 14px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c,var(--line)) var(--p,0%),var(--line) 0);position:relative;transition:--p .5s}
+.ring::before{content:"";position:absolute;inset:12px;background:var(--card);border-radius:50%}
+.ring span{position:relative;font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+.ring.live{animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #17a67355}100%{box-shadow:0 0 0 24px #17a67300}}
+.big{padding:14px 30px;font-size:18px;border-radius:14px}
+.in{background:var(--ok)}.out{background:var(--bad)}
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.t-new{background:#5a00ff22;color:var(--blue)}.t-prog{background:#e600e633;color:#a100a1}.t-done{background:#17a67322;color:var(--ok)}.t-late{background:#e5484d22;color:var(--bad)}
+.task h3{margin:0 0 4px;font-size:17px}.task p{margin:4px 0;color:var(--mute);font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.bar{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--ok));transition:width .8s cubic-bezier(.2,.9,.3,1)}
+.rep{background:var(--bg);border-left:4px solid var(--ok);padding:10px 12px;border-radius:8px;margin-top:10px;font-size:14px;animation:pop .4s}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line)}th{color:var(--mute);font-weight:600}
+.empty{color:var(--mute);text-align:center;padding:24px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,100px);background:var(--ink);color:var(--card);padding:12px 20px;border-radius:12px;transition:transform .4s cubic-bezier(.2,.9,.3,1.3);z-index:9}
+#toast.show{transform:translate(-50%,0)}
+h2{margin:18px 0 10px;font-size:20px}
+
+#login::before,#login::after{content:"";position:fixed;width:340px;height:340px;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;animation:float 9s ease-in-out infinite}
+#login::before{background:#5a00ff;left:-80px;top:-60px}#login::after{background:#ff00ff;right:-80px;bottom:-60px;animation-delay:-4s}
+@keyframes float{50%{transform:translate(60px,40px) scale(1.2)}}
+.lbox{position:relative;z-index:1}
+.lbox h1{background:linear-gradient(90deg,var(--ink),var(--blue),var(--acc),var(--ink));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:300% 0}}
+.fbox{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 20px 50px rgba(20,33,61,.15)}
+.fbox label{animation:pop .5s both}.fbox label:nth-of-type(2){animation-delay:.12s}
+.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.err{color:var(--bad);font-size:13px;min-height:18px;margin-top:8px}
+.hint{margin-top:14px;font-size:12px;color:var(--mute);line-height:1.6}
+.hint b{color:var(--ink)}
+.wave{display:inline-block;animation:wave 1.8s infinite;transform-origin:70% 70%}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(16deg)}20%,40%{transform:rotate(-8deg)}}
+.card{transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,33,61,.12);border-color:var(--acc)}
+.card.stagger{animation:slide .55s cubic-bezier(.2,.9,.3,1.1) both}
+@keyframes slide{from{opacity:0;transform:translateX(-24px) scale(.98)}to{opacity:1;transform:none}}
+.ring{animation:spin-in .9s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes spin-in{from{transform:rotate(-180deg) scale(.5);opacity:0}}
+.ring span{animation:none}
+.tag{animation:tagpop .5s cubic-bezier(.2,.9,.3,2) both}
+@keyframes tagpop{from{transform:scale(0)}}
+.t-prog{background-image:linear-gradient(110deg,transparent 30%,#fff6 50%,transparent 70%);background-size:200% 100%;animation:tagpop .5s both,glint 2.4s 1s infinite}
+@keyframes glint{to{background-position:-200% 0}}
+.bar i{background-size:200% 100%;animation:flow 2s linear infinite}
+@keyframes flow{to{background-position:-200% 0}}
+button{position:relative;overflow:hidden}
+.rp{position:absolute;border-radius:50%;background:#fff6;transform:scale(0);animation:ripple .6s ease-out;pointer-events:none}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+#v{animation:view .5s cubic-bezier(.2,.9,.3,1)}
+@keyframes view{from{opacity:0;transform:translateY(18px)}}
+tr{animation:pop .4s both}
+.av{transition:transform .4s}.me:hover .av{transform:rotate(360deg) scale(1.1)}
+.cf{position:fixed;top:0;width:10px;height:14px;z-index:20;pointer-events:none;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--x),105vh) rotate(720deg);opacity:.8}}
+.in:not(.tag){animation:breath 2.4s infinite}.out:not(.tag){animation:breath 2.4s infinite}
+@keyframes breath{50%{transform:scale(1.05)}}
+
+.logo{width:130px;height:130px;border-radius:30px;display:block;margin:0 auto 14px;box-shadow:0 14px 40px #5a00ff55;animation:bob 4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-2deg)}}
+.hl{width:44px;height:44px;border-radius:12px;transition:transform .5s}.hl:hover{transform:rotate(360deg)}
+nav{max-width:100%;overflow-x:auto}nav button{white-space:nowrap}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+<div id="root"></div><div id="toast" role="status"></div>
+<script>
+const LOGO='data:image/jpeg;base64,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';
+const PAL=['#5a00ff','#e600e6','#17a673','#2f5bea','#d9488f','#e07b00','#0f9aa8'];
+const mk=(id,name,title,level,boss)=>({id,name,title,level,boss,lg:name.toLowerCase(),pw:name.toLowerCase()+'2026'});
+const SEED=[mk('f','Firdavs','Direktor','director',null),mk('fr','Farrux','Kuryer direktor','director',null),mk('o','Otabek','Bosh menejer','manager','f'),mk('z','Ziyoda','Menejer','manager','f'),mk('sv','Sevara','Operator','operator','z'),mk('x','Xusnora','Operator','operator','z'),mk('v','Vazira','Menejer yordamchi operator','operator','o'),mk('j','Jeyran','Operator','operator','o'),mk('si','Sevinch','Kuryer menejer','manager','fr'),mk('fo','Fotima','Kuryer operator','operator','si'),mk('zo','Zoxid','Operator','operator','o')];
+let S={users:SEED,tasks:[],att:{},rep:[],seq:1};
+try{const r=localStorage.getItem('marakuya-v2');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem('marakuya-v2',JSON.stringify(S))}catch(e){}};
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const U=id=>S.users.find(u=>u.id===id)||{id,name:"(o'chirilgan)",title:'',level:'operator'};
+const col=u=>PAL[Math.max(0,S.users.indexOf(u))%PAL.length];
+const av=u=>`<span class="av" style="background:${col(u)}">${E(u.name[0])}</span>`;
+const direct=id=>S.users.filter(u=>u.boss===id);
+const desc=id=>{const r=[],w=x=>direct(x).forEach(u=>{r.push(u);w(u.id)});w(id);return r};
+const $=s=>document.querySelector(s);
+const fmt=t=>new Date(t).toLocaleTimeString('uz',{hour:'2-digit',minute:'2-digit'});
+const day=t=>new Date(t).toDateString();
+const iso=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const dur=ms=>{const m=Math.floor(ms/6e4);return Math.floor(m/60)+' soat '+m%60+' daq'};
+let me=null,tab='att';
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2600)}
+const stTxt={new:['Yangi','t-new'],prog:['Jarayonda','t-prog'],done:['Bajarildi','t-done']};
+function stagger(){document.querySelectorAll('#v .card').forEach((c,i)=>{c.classList.add('stagger');c.style.animationDelay=(i*90)+'ms'});document.querySelectorAll('#v tr').forEach((r,i)=>r.style.animationDelay=(i*40)+'ms')}
+function confetti(){const c=['#5a00ff','#e600e6','#17a673','#ffd23f','#2f5bea'];for(let i=0;i<50;i++){const e=document.createElement('i');e.className='cf';e.style.cssText=`left:${Math.random()*100}vw;background:${c[i%5]};--x:${Math.random()*200-100}px;animation-delay:${Math.random()*.4}s;border-radius:${i%2?'50%':'2px'}`;document.body.appendChild(e);setTimeout(()=>e.remove(),2400)}}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height),x=document.createElement('span');x.className='rp';x.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(x);setTimeout(()=>x.remove(),600)});
+
+function login(){
+ $('#root').innerHTML=`<div id="login"><div class="lbox"><img class="logo" src="${LOGO}" alt="Marakuya Taxi"><p style="text-align:center">Salom <span class="wave">👋</span> Login va parolingiz bilan kiring.</p>
+ <div class="fbox" id="fb"><label for="lg">Login</label><input id="lg" autocomplete="username" autocapitalize="none"><label for="ps">Parol</label><input id="ps" type="password" autocomplete="current-password">
+ <div class="err" id="er" role="alert"></div><button class="big" id="go" style="width:100%;margin-top:6px">Kirish</button></div></div></div>`;
+ const go=()=>{const l=$('#lg').value.trim().toLowerCase(),p=$('#ps').value,u=S.users.find(x=>x.lg===l);
+  if(u&&u.pw===p){me=u;tab='att';app();toast('Xush kelibsiz, '+u.name+'!')}
+  else{$('#er').textContent="Login yoki parol noto'g'ri. Qayta urinib ko'ring.";const f=$('#fb');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake')}};
+ $('#go').onclick=go;$('#ps').onkeydown=e=>{if(e.key==='Enter')go()};$('#lg').focus();
+}
+function app(){
+ const nw=S.rep.filter(r=>r.to===me.id&&!r.seen).length;
+ const tabs=[['att','Davomat'],['rep','Hisobot'+(nw?' ('+nw+')':'')],['tasks','Topshiriqlar']];
+ if(me.level!=='operator')tabs.push(['team','Jamoa']);if(me.level==='director')tabs.push(['staff','Xodimlar']);
+ const keys=tabs.map(t=>t[0]);
+ $('#root').innerHTML=`<div class="wrap"><header><div class="me"><img class="hl" src="${LOGO}" alt=""><div><b>${E(me.name)}</b><br><small style="color:var(--mute)">${E(me.title)}</small></div></div>
+ <nav>${tabs.map(t=>`<button class="${tab===t[0]?'on':''}" data-t="${t[0]}">${t[1]}</button>`).join('')}</nav><div class="row" style="margin:0"><button class="ghost" id="pwc">Parol</button><button class="ghost" id="lo">Chiqish</button></div></header><main id="v"></main></div>`;
+ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;app()});
+ $('#lo').onclick=()=>{me=null;login()};
+ $('#pwc').onclick=()=>{const o=prompt('Joriy parol:');if(o===null)return;if(o!==me.pw)return toast("Joriy parol noto'g'ri");const n=prompt('Yangi parol (kamida 6 belgi):');if(!n||n.length<6)return toast('Parol juda qisqa');me.pw=n;save();toast("Parol o'zgartirildi")};
+ ({att:vAtt,rep:vRep,tasks:vTasks,team:vTeam,staff:vStaff})[keys.includes(tab)?tab:'att']();stagger();
+}
+/* DAVOMAT */
+const recs=id=>S.att[id]||[];
+const today=id=>recs(id).filter(r=>day(r.in)===day(Date.now()));
+const open=id=>recs(id).find(r=>!r.out);
+const worked=id=>today(id).reduce((a,r)=>a+((r.out||Date.now())-r.in),0);
+function vAtt(){
+ const o=open(me.id),all=recs(me.id).slice().reverse();
+ $('#v').innerHTML=`<div class="grid"><div class="card clock"><div class="ring ${o?'live':''}" id="ring" style="--c:${o?'var(--ok)':'var(--acc)'}"><span id="clk"></span></div>
+ <div id="stat" style="color:var(--mute);margin-bottom:14px"></div>
+ <button class="big ${o?'out':'in'}" id="tg">${o?'Ketdim':'Keldim'}</button></div>
+ <div class="card"><b>Davomat tarixi</b><table><tr><th>Sana</th><th>Keldi</th><th>Ketdi</th><th>Holat</th></tr>
+ ${all.length?all.slice(0,8).map(r=>{const d=new Date(r.in),late=d.getHours()*60+d.getMinutes()>540;return `<tr><td>${d.toLocaleDateString('uz')}</td><td>${fmt(r.in)}</td><td>${r.out?fmt(r.out):'—'}</td><td><span class="tag ${late?'t-late':'t-done'}">${late?'Kechikdi':'Vaqtida'}</span></td></tr>`}).join(''):`<tr><td colspan="4" class="empty">Hali yozuv yo'q. «Keldim» tugmasini bosing.</td></tr>`}</table></div></div>`;
+ $('#tg').onclick=()=>{S.att[me.id]=S.att[me.id]||[];if(o){o.out=Date.now();toast('Ketdingiz. Ish vaqti: '+dur(worked(me.id)))}else{S.att[me.id].push({in:Date.now(),out:null});toast('Keldingiz. Ish kuningiz xayrli!');confetti()}save();vAtt();stagger()};
+ clearInterval(vAtt.t);const tick=()=>{if(!$('#clk')){clearInterval(vAtt.t);return}$('#clk').textContent=new Date().toLocaleTimeString('uz');const w=worked(me.id);$('#stat').textContent=(open(me.id)?'Ishdasiz · ':'Bugun · ')+dur(w);$('#ring').style.setProperty('--p',Math.min(100,w/288e5*100)+'%')};
+ tick();vAtt.t=setInterval(tick,1000);
+}
+/* KUNLIK HISOBOT */
+function vRep(){
+ const boss=me.boss?U(me.boss):null,mine=S.rep.filter(r=>r.uid===me.id).slice().reverse().slice(0,7);
+ const ids=new Set(desc(me.id).map(u=>u.id)),fd=vRep.fd||'';
+ const inbox=S.rep.filter(r=>ids.has(r.uid)&&(!fd||r.date===fd)).slice().reverse();
+ $('#v').innerHTML=`${boss?`<div class="card"><b>Kunlik hisobot</b><div style="color:var(--mute);font-size:14px">Hisobot rahbaringizga yuboriladi: <b>${E(boss.name)}</b> (${E(boss.title)})</div>
+ <label>Sana</label><input type="date" id="rd" value="${iso(Date.now())}"><label>Bugun nima qildingiz? Erkin yozing</label><textarea rows="5" id="rt" placeholder="Masalan: 42 ta buyurtma qabul qildim, 3 ta shikoyat hal qilindi..."></textarea>
+ <div class="row"><button id="rs">Yuborish</button></div></div>
+ <div class="card"><b>Mening hisobotlarim</b>${mine.length?mine.map(r=>`<div class="rep"><small>${E(r.date)} · ${fmt(r.ts)} → ${E(U(r.to).name)}</small><br>${E(r.text).replace(/\n/g,'<br>')}</div>`).join(''):`<div class="empty">Hali hisobot yubormagansiz.</div>`}</div>`:''}
+ ${ids.size?`<div class="card"><div class="row" style="justify-content:space-between;margin:0"><b>Kelgan hisobotlar</b><input type="date" id="fd" value="${fd}" style="width:auto;margin:0"></div>
+ ${inbox.length?inbox.map(r=>`<div class="rep" style="border-color:var(--acc)"><b>${E(U(r.uid).name)}</b> <small>${E(U(r.uid).title)} · ${E(r.date)}</small>${r.to===me.id&&!r.seen?' <span class="tag t-new">Yangi</span>':''}<br>${E(r.text).replace(/\n/g,'<br>')}</div>`).join(''):`<div class="empty">Bu sanada hisobot yo'q.</div>`}</div>`:''}`;
+ inbox.forEach(r=>{if(r.to===me.id)r.seen=true});save();
+ if(boss)$('#rs').onclick=()=>{const t=$('#rt').value.trim();if(!t)return toast('Avval hisobotni yozing');S.rep.push({id:S.seq++,uid:me.id,to:me.boss,date:$('#rd').value||iso(Date.now()),text:t,ts:Date.now()});save();confetti();toast('Hisobot '+boss.name+'ga yuborildi');vRep();stagger()};
+ if(ids.size)$('#fd').onchange=e=>{vRep.fd=e.target.value;vRep();stagger()};
+}
+/* TOPSHIRIQLAR */
+const kids=id=>S.tasks.filter(t=>t.par===id);
+function prog(t){const k=kids(t.id);if(!k.length)return t.st==='done'?100:t.st==='prog'?50:0;return Math.round(k.filter(x=>x.st==='done').length/k.length*100)}
+const targets=()=>me.level==='director'?desc(me.id):direct(me.id);
+function card(t){
+ const mine=t.to===me.id,k=kids(t.id),[tx,tc]=stTxt[t.st];
+ let h=`<div class="card task"><div class="row" style="justify-content:space-between;margin:0"><h3>${E(t.title)}</h3><span class="tag ${tc}">${tx}</span></div>
+ <p>${E(t.desc)}</p><p>${E(U(t.from).name)} → <b>${E(U(t.to).name)}</b> · muddat: ${E(t.due)||'—'}</p><div class="bar"><i style="width:${prog(t)}%"></i></div>`;
+ if(t.rep)h+=`<div class="rep"><b>Hisobot:</b> ${E(t.rep)}</div>`;
+ if(mine&&t.st==='new')h+=`<div class="row"><button data-a="start" data-i="${t.id}">Boshladim</button></div>`;
+ if(mine&&t.st!=='done')h+=`<label>Hisobot yozing</label><textarea rows="2" id="r${t.id}" placeholder="Nima qilindi, natija qanday?"></textarea><div class="row"><button data-a="rep" data-i="${t.id}" style="background:var(--ok)">Hisobot yuborish</button>
+ ${direct(me.id).length?`<button class="ghost" data-a="del" data-i="${t.id}">Xodimga topshirish</button>`:''}</div>`;
+ if(k.length)h+=`<div style="margin-top:12px;border-top:1px solid var(--line);padding-top:6px"><small style="color:var(--mute)">Xodimlar topshirig'i (${k.filter(x=>x.st==='done').length}/${k.length})</small>${k.map(x=>`<div class="row"><span class="tag ${stTxt[x.st][1]}">${stTxt[x.st][0]}</span><b>${E(x.title)}</b> — ${E(U(x.to).name)}</div>${x.rep?`<div class="rep">${E(x.rep)}</div>`:''}`).join('')}</div>`;
+ return h+'</div>';
+}
+function vTasks(){
+ const mineT=S.tasks.filter(t=>t.to===me.id),givenT=S.tasks.filter(t=>t.from===me.id),tg=targets();
+ $('#v').innerHTML=`${tg.length?`<div class="card"><b>Yangi topshiriq</b><div class="grid"><div><label>Nomi</label><input id="nt"></div><div><label>Kimga</label><select id="nw">${tg.map(u=>`<option value="${u.id}">${E(u.name)} — ${E(u.title)}</option>`).join('')}</select></div></div>
+ <label>Izoh</label><input id="nd"><label>Muddat</label><input type="date" id="ndu"><div class="row"><button id="send">Yuborish</button></div></div>`:''}
+ <h2>Menga berilgan</h2>${mineT.length?mineT.map(card).join(''):`<div class="card empty">Hozircha topshiriq yo'q.</div>`}
+ ${tg.length?`<h2>Men bergan</h2>${givenT.length?givenT.filter(t=>!(t.par&&givenT.some(p=>p.id===t.par))).map(card).join(''):`<div class="card empty">Siz hali topshiriq bermagansiz.</div>`}`:''}`;
+ if(tg.length)$('#send').onclick=()=>{const ti=$('#nt').value.trim();if(!ti)return toast('Topshiriq nomini yozing');S.tasks.push({id:S.seq++,title:ti,desc:$('#nd').value,from:me.id,to:$('#nw').value,due:$('#ndu').value,st:'new',par:null,rep:''});save();toast('Topshiriq yuborildi');vTasks();stagger()};
+ document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const t=S.tasks.find(x=>x.id==b.dataset.i),a=b.dataset.a;
+  if(a==='start'){t.st='prog';toast("Jarayonga o'tdi")}
+  if(a==='rep'){const v=$('#r'+t.id).value.trim();if(!v)return toast('Avval hisobot yozing');t.rep=v;t.st='done';toast('Hisobot yuborildi');confetti()}
+  if(a==='del'){const w=direct(me.id),n=prompt('Xodim raqami:\n'+w.map((u,i)=>(i+1)+'. '+u.name).join('\n'),'1'),u=w[n-1];if(!u)return;S.tasks.push({id:S.seq++,title:t.title,desc:t.desc,from:me.id,to:u.id,due:t.due,st:'new',par:t.id,rep:''});t.st='prog';toast('Xodimga yuborildi: '+u.name)}
+  save();vTasks();stagger()});
+}
+/* JAMOA + EXCEL */
+function vTeam(){
+ const list=desc(me.id),td=iso(Date.now());
+ $('#v').innerHTML=`<div class="card"><b>Oylik davomat (Excel)</b><div class="row"><input type="month" id="mo" value="${td.slice(0,7)}" style="width:auto;margin:0"><button id="xl" style="background:var(--ok)">Excel yuklab olish</button></div></div>
+ <div class="card"><b>Bugungi holat</b><table><tr><th>Xodim</th><th>Davomat</th><th>Keldi</th><th>Ish vaqti</th><th>Hisobot</th></tr>
+ ${list.length?list.map(u=>{const t=today(u.id),o=open(u.id),r=S.rep.some(x=>x.uid===u.id&&x.date===td);
+ return `<tr><td><b>${E(u.name)}</b><br><small style="color:var(--mute)">${E(u.title)}</small></td><td><span class="tag ${o?'t-done':t.length?'t-prog':'t-late'}">${o?'Ishda':t.length?'Ketgan':'Kelmagan'}</span></td><td>${t.length?fmt(t[0].in):'—'}</td><td>${t.length?dur(worked(u.id)):'—'}</td><td><span class="tag ${r?'t-done':'t-late'}">${r?'Yubordi':'Yubormadi'}</span></td></tr>`}).join(''):`<tr><td colspan="5" class="empty">Sizga xodim biriktirilmagan.</td></tr>`}</table></div>`;
+ $('#xl').onclick=xl;
+}
+async function xl(){
+ const m=$('#mo').value;if(!m)return toast('Oyni tanlang');
+ const [Y,M]=m.split('-').map(Number),n=new Date(Y,M,0).getDate(),list=[me,...desc(me.id)];
+ const head=['№','Xodim','Lavozim',...Array.from({length:n},(_,i)=>i+1),'Kelgan kunlar','Jami soat','Kechikishlar'];
+ const rows=list.map((u,k)=>{let days=0,ms=0,late=0;const cells=[];
+  for(let d=1;d<=n;d++){const rs=recs(u.id).filter(r=>{const x=new Date(r.in);return x.getFullYear()===Y&&x.getMonth()+1===M&&x.getDate()===d});
+   if(rs.length){days++;const f=new Date(rs[0].in);if(f.getHours()*60+f.getMinutes()>540)late++;rs.forEach(r=>ms+=(r.out||r.in)-r.in);cells.push(rs.map(r=>fmt(r.in)+'–'+(r.out?fmt(r.out):'?')).join(', '))}else cells.push('')}
+  return [k+1,u.name,u.title,...cells,days,+(ms/36e5).toFixed(1),late]});
+ try{
+  if(!window.XLSX)return toast('Excel kutubxonasi yuklanmadi');
+  const ws=XLSX.utils.aoa_to_sheet([head,...rows]);ws['!cols']=[{wch:4},{wch:16},{wch:26},...Array(n).fill({wch:13}),{wch:13},{wch:11},{wch:12}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Davomat');
+  const buf=XLSX.write(wb,{type:'array',bookType:'xlsx'}),dl=window.claude?await claude.use('downloads'):null;
+  if(!dl)return toast('Yuklab olish bu oynada mavjud emas');
+  await dl.save({filename:'davomat-'+m+'.xlsx',data:new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})});toast('Excel tayyor');
+ }catch(e){if(!e||e.code!=='declined')toast('Fayl saqlanmadi. Qayta urinib ko\'ring')}
+}
+/* XODIMLAR (direktor) */
+function vStaff(){
+ const bosses=S.users.filter(u=>u.level!=='operator');
+ $('#v').innerHTML=`<div class="card"><b>Yangi xodim va login yaratish</b><div class="grid"><div><label>Ism</label><input id="sn"></div><div><label>Lavozim</label><input id="st" placeholder="Masalan: Operator"></div>
+ <div><label>Daraja</label><select id="sl"><option value="operator">Operator</option><option value="manager">Menejer</option><option value="director">Direktor</option></select></div>
+ <div><label>Rahbari</label><select id="sb"><option value="">— yo'q —</option>${bosses.map(u=>`<option value="${u.id}">${E(u.name)} — ${E(u.title)}</option>`).join('')}</select></div>
+ <div><label>Login</label><input id="sg" autocapitalize="none"></div><div><label>Parol (kamida 6 belgi)</label><input id="sp"></div></div>
+ <div class="row"><button id="sa">Yaratish</button></div></div>
+ <div class="card"><b>Barcha xodimlar (${S.users.length})</b><div style="overflow-x:auto"><table><tr><th>Xodim</th><th>Login</th><th>Rahbari</th><th></th></tr>
+ ${S.users.map(u=>`<tr><td>${av(u)} <b>${E(u.name)}</b><br><small style="color:var(--mute)">${E(u.title)}</small></td><td>${E(u.lg)}</td>
+ <td><select data-b="${u.id}" style="margin:0;min-width:130px"><option value="">— yo'q —</option>${bosses.filter(b=>b.id!==u.id).map(b=>`<option value="${b.id}" ${u.boss===b.id?'selected':''}>${E(b.name)}</option>`).join('')}</select></td>
+ <td><div class="row" style="margin:0"><button class="ghost" data-p="${u.id}">Parol</button>${u.id!==me.id?`<button class="ghost" data-x="${u.id}" style="color:var(--bad)">O'chirish</button>`:''}</div></td></tr>`).join('')}</table></div></div>`;
+ $('#sa').onclick=()=>{const n=$('#sn').value.trim(),lg=$('#sg').value.trim().toLowerCase(),pw=$('#sp').value;
+  if(!n||!lg)return toast('Ism va loginni kiriting');if(pw.length<6)return toast('Parol kamida 6 belgi bo\'lsin');if(S.users.some(u=>u.lg===lg))return toast('Bu login band');
+  S.users.push({id:'u'+S.seq++,name:n,title:$('#st').value.trim()||'Xodim',level:$('#sl').value,boss:$('#sb').value||null,lg,pw});save();confetti();toast(n+' qo\'shildi');vStaff();stagger()};
+ document.querySelectorAll('[data-b]').forEach(s=>s.onchange=()=>{U(s.dataset.b).boss=s.value||null;save();toast("Rahbar o'zgartirildi")});
+ document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const u=U(b.dataset.p),n=prompt(u.name+" uchun yangi parol (kamida 6 belgi):");if(!n)return;if(n.length<6)return toast('Parol juda qisqa');u.pw=n;save();toast('Parol yangilandi')});
+ document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{const u=U(b.dataset.x);if(!confirm(u.name+" o'chirilsinmi?"))return;direct(u.id).forEach(k=>k.boss=u.boss);S.users=S.users.filter(x=>x.id!==u.id);save();toast("Xodim o'chirildi");vStaff();stagger()});
+}
+login();
+
+</script>
+</body>
+</html>
